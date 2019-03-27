@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Send file to back end</title>
+    </head>
+    <body>
+        <input type="file" id="getFile">
+        <input type="button" value="Send" id="sendFile">
+
+        <div id="uploaded-images">
+            Тут будуть відображатись завантажені картинки
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            function getBase64(file) {
+              return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+              });
+            }
+
+            document.getElementById("sendFile").onclick = function(){
+                var file = document.getElementById("getFile").files[0];
+                getBase64(file).then(data => {
+
+                    //work with data as src of file
+                    let request = {
+                        //fileName: "someCustomFileName",
+                        data: data
+                    }
+                    $.ajax({
+                        url: "http://localhost:8080/upload",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(request),
+                        success: function (data) {
+                            addImgToContainer(data);
+                        },
+                        error: function (error) {
+                            alert(error.message);
+                        }
+                    });
+                });
+            };
+
+            function addImgToContainer(fileName) {
+                let img = document.createElement('img');
+                img.setAttribute('src', '/img/' + fileName);
+                document.getElementById('uploaded-images').appendChild(img);
+            }
+
+        </script>
+    </body>
+</html>
