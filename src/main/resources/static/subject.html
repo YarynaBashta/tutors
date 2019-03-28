@@ -55,7 +55,7 @@
 </table>
 
 <script>
-    var mainUrl = "http://localhost:8080";
+    var mainUrl = "https://tutors-student.herokuapp.com";
 
     getAllSubjects();
     setModalConfiguration();
@@ -65,7 +65,7 @@
 
     function initLevels() {
         $.ajax({
-            url: 'http://localhost:8080/level',
+            url: 'https://tutors-student.herokuapp.com/level',
             type: 'get',
             success: function (levels) {
                 var $subject = $('#subject-level');
