@@ -198,12 +198,16 @@
                         $('#id').val(data.id);
                       //  $('#slevels').val(data.levelsId);
                      //   $('input:checkbox[name="subjectLevels"]').filter('[value="'+data.levelsId+'"]').attr('checked', true);
-                         var subjectLevel  = [];
-                        $('.subj').each(function (i, e) {
-                            var $elem = $(e);
-                            $elem.get(0).checked = true
-                            subjectLevel.push(+$elem.val())
-                        })
+                        let lvls = data.levels;
+                        for (let j = 0; j < lvls.length; j++) {
+
+                            $('.subj').each(function (i, e) {
+                                let $elem = $(e);
+                                if ($elem.val() == lvls[j].id) {
+                                    $elem.attr('checked', true)
+                                }
+                            })
+                        }
 
                         $('#myModal').show();
                         $('#btnUpdateSubject').show();
