@@ -55,7 +55,12 @@
 </table>
 
 <script>
-    var mainUrl = "https://tutors-student.herokuapp.com";
+    var mainUrl = "http://localhost:8080" ;
+
+
+    if (!window.localStorage.getItem('token')) {
+        window.location.href = '/sign';
+    }
 
     getAllSubjects();
     setModalConfiguration();
@@ -65,8 +70,11 @@
 
     function initLevels() {
         $.ajax({
-            url: 'https://tutors-student.herokuapp.com/level',
+            url: 'http://localhost:8080/level',
             type: 'get',
+            headers: {
+                'Authorize': window.localStorage.getItem('token')
+            },
             success: function (levels) {
                 var $subject = $('#subject-level');
                 $subject.html('');
@@ -86,6 +94,9 @@
         $.ajax({
             url: mainUrl + "/subject",
             type: "GET",
+            headers: {
+                'Authorize': window.localStorage.getItem('token')
+            },
             contentType: "application/json",
             success: function (dataResponse) {
                 setSubjectsToTable(dataResponse);
@@ -129,6 +140,9 @@
                 $.ajax({
                     url: mainUrl + "/subject?id=" + $(this).val(),
                     type: "DELETE",
+                    headers: {
+                        'Authorize': window.localStorage.getItem('token')
+                    },
                     success: function (data) {
                         location.reload();
                         },
@@ -152,6 +166,8 @@
                     subjectLevel.push(+$elem.val())
 
                 }
+
+
             })
             if (!subjectName) {
                 alert('Subject name can\'t be empty');
@@ -168,6 +184,9 @@
                 $.ajax({
                     url: mainUrl + "/subject",
                     type: "POST",
+                    headers: {
+                        'Authorize': window.localStorage.getItem('token')
+                    },
                     contentType: "application/json",
                     data: JSON.stringify(newSubject),
                     success: function (data) {
@@ -190,14 +209,18 @@
                 $.ajax({
                     url: mainUrl + "/subject/one" ,
                     type: "GET",
+                    headers: {
+                        'Authorize': window.localStorage.getItem('token')
+                    },
                     data: {
                         id:$(this).val()
                     },
                     success: function (data) {
                         $('#sname').val(data.name);
                         $('#id').val(data.id);
-                      //  $('#slevels').val(data.levelsId);
-                     //   $('input:checkbox[name="subjectLevels"]').filter('[value="'+data.levelsId+'"]').attr('checked', true);
+
+                     //   $('.subj').val(data.levelsId);
+                        // .get(0).checked=true;
                         let lvls = data.levels;
                         for (let j = 0; j < lvls.length; j++) {
 
@@ -208,6 +231,14 @@
                                 }
                             })
                         }
+                        /*console.log('dasdad', data)
+                        $('.subj').each(function (i, e) {
+                            var $elem = $(e);
+                            if ($elem.get(0).checked=true) {
+                                $elem.attr('checked',true)
+                            }
+                        })*/
+
 
                         $('#myModal').show();
                         $('#btnUpdateSubject').show();

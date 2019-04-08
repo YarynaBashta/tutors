@@ -30,6 +30,9 @@ public class Tutor {
     private Integer price;
     private String photo;
 
+    @OneToOne(mappedBy = "tutor")
+    private User user;
+
     @ManyToMany
     private List<Subject> subjects = new ArrayList<>();
 
